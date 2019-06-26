@@ -56,7 +56,6 @@ class Tips extends Component {
                             <h2>Bill Amount Before Tax</h2>
                             <Input
                                 type="text"
-                                // value={this.state.billAmt}
                                 onChange={this.handleInputChange}
                                 name="billAmt"
                                 placeholder="Bill Amount (required)"
@@ -65,7 +64,6 @@ class Tips extends Component {
                             <h2>Percent Tip to Calculate</h2>
                             <Input
                                 type="text"
-                                // value={this.state.tipPercent}
                                 onChange={this.handleInputChange}
                                 name="tipPercent"
                                 placeholder="Percent Tip(required)"
@@ -73,14 +71,13 @@ class Tips extends Component {
                             <h2># of Ways to Split Tip</h2>
                             <Input
                                 type="text"
-                                // value={this.state.splitTip}
                                 onChange={this.handleInputChange}
                                 name="splitTip"
                                 placeholder="# of ways to split tip"
                             />
-
                             <FormBtn
-                                // disabled={!(this.state.billAmt) || !(this.state.tipPercent)}
+                                disabled={!(this.state.billAmt)}
+                                disabled={!(this.state.tipPercent)}
                                 onClick={this.handleFormSubmit}
                             >
                                 Calculate Tip

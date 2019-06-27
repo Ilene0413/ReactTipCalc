@@ -15,7 +15,8 @@ class Tips extends Component {
             splitTip: 0,
             totalTip: 0,
             splitTipAmt: 0,
-            message: ""
+            message: "",
+            isTipCalc: false
         };
         this.handleInputChange = this.handleInputChange.bind(this);
     }
@@ -35,11 +36,15 @@ class Tips extends Component {
         console.log("validate input");
         let billEntered = this.state.billAmt;
         let tipEntered = this.state.tipPercent;
-        let calcTip = {
-            billAmount: 0,
-            percentTip: 0,
-            splitTip: this.state.splitTip
-        };
+        let splitTip = this.state.splitTip;
+
+        // let calcTip = {
+        //     billAmount: 0,
+        //     percentTip: 0,
+        //     splitTip: this.state.splitTip
+        // };
+        let billAmount = 0;
+        let percentTip = 0;
         let message = "";
 
         //validate the form input
@@ -87,98 +92,112 @@ class Tips extends Component {
         //validate that split amount is entered 
 
         //split number must be an integer
-        if (calcTip.splitTip.includes(".")) {
+        if (splitTip.includes(".")) {
             message = "number of ways to split tip must be an integer";
             this.setState({ message: message }); // creates a NEW state object
             return;
         }
         else {
-            if (calcTip.splitTip <= 0) {
+            if (splitTip <= 0) {
                 message = "number of ways to split tip must be greater than 0";
                 this.setState({ message: message }); // creates a NEW state object
                 return;
             }
         }
-        calcTip.billAmount = parseFloat(billEntered);
-        calcTip.percentTip = parseFloat(tipEntered);
+        billAmount = parseFloat(billEntered);
+        percentTip = parseFloat(tipEntered);
 
-    }
+        //calculate tip amount based on dollar amount entered and percent tip
 
-handleFormSubmit = event => {
-    event.preventDefault();
-    console.log(`bill amt ${this.state.billAmt} tipamt ${this.state.tipPercent} split ${this.state.splitTip}`);
-    // only able to submit if the bill amount and tip percentage were entered
-    // need to validate input 
-    this.validateInput();
+        let totalTip = (billAmount * (percentTip / 100));
 
-};
+        //split the tip amount then number of ways entered
+        let splitTipAmt = totalTip / splitTip;
 
-render() {
-    return (
-        <Container fluid>
-            <Row>
-                <Col size="sm-12">
-                    <Jumbotron>
-                        <h1>
-                            Calculate Restaurant Tip
+        //tip amounts should be rounded to 2 decimal places
+        totalTip = totalTip.toFixed(2);
+        splitTipAmt = splitTipAmt.toFixed(2);
+        let isTipCalc = true;
+        console.log(isTipCalc);
+        this.setState({ totalTip: totalTip, splitTip: splitTip, splitTipAmt: splitTipAmt, isTipCalc: isTipCalc });
+
+
+    };
+
+
+    handleFormSubmit = event => {
+        event.preventDefault();
+        console.log(`bill amt ${this.state.billAmt} tipamt ${this.state.tipPercent} split ${this.state.splitTip}`);
+        // only able to submit if the bill amount and tip percentage were entered
+        // need to validate input 
+        this.validateInput();
+
+    };
+
+    render() {
+        return (
+            <Container fluid>
+                <Row>
+                    <Col size="sm-12">
+                        <Jumbotron>
+                            <h1>
+                                Calculate Restaurant Tip
 							</h1>
-                    </Jumbotron>
-                </Col>
-            </Row>
-            <Row>
-                <Col size="sm-12">
-                    <p> {this.state.message}</p>
-                    <form>
-                        <h2>Bill Amount Before Tax</h2>
-                        <Input
-                            type="text"
-                            onChange={this.handleInputChange}
-                            name="billAmt"
-                            placeholder="Bill Amount (required)"
-                        />
+                        </Jumbotron>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col size="sm-12">
+                        <p> {this.state.message}</p>
+                        <form>
+                            <h2>Bill Amount Before Tax</h2>
+                            <Input
+                                type="text"
+                                onChange={this.handleInputChange}
+                                name="billAmt"
+                                placeholder="Bill Amount (required)"
+                            />
 
-                        <h2>Percent Tip to Calculate</h2>
-                        <Input
-                            type="text"
-                            onChange={this.handleInputChange}
-                            name="tipPercent"
-                            placeholder="Percent Tip(required)"
-                        />
-                        <h2># of Ways to Split Tip</h2>
-                        <Input
-                            type="text"
-                            onChange={this.handleInputChange}
-                            name="splitTip"
-                            placeholder="# of ways to split tip"
-                        />
-                        <FormBtn
-                            disabled={!(this.state.billAmt)}
-                            disabled={!(this.state.tipPercent)}
-                            disabled={!(this.state.splitTip)}
-                            onClick={this.handleFormSubmit}
-                        >
-                            Calculate Tip
+                            <h2>Percent Tip to Calculate</h2>
+                            <Input
+                                type="text"
+                                onChange={this.handleInputChange}
+                                name="tipPercent"
+                                placeholder="Percent Tip(required)"
+                            />
+                            <h2># of Ways to Split Tip</h2>
+                            <Input
+                                type="text"
+                                onChange={this.handleInputChange}
+                                name="splitTip"
+                                placeholder="# of ways to split tip"
+                            />
+                            <FormBtn
+                                disabled={!(this.state.billAmt)}
+                                disabled={!(this.state.tipPercent)}
+                                disabled={!(this.state.splitTip)}
+                                onClick={this.handleFormSubmit}
+                            >
+                                Calculate Tip
 							</FormBtn>
-                    </form>
-                </Col>
-            </Row >
-            <Row>
-                return (
+                        </form>
+                    </Col>
+                </Row >
+                <Row>
+                    {/* {this.isTipCalc ? ( */}
+                        
                         <Viewtip
-                    totalTip={this.state.totalTip}
-                    spltTip={this.state.splitTip}
-                    splitTipAmt={this.state.splitTipAmt}>
-                </Viewtip> }
-);
-})}
-                    ) : (<br></br>
+                            totalTip={this.state.totalTip}
+                            splitTip={this.state.splitTip}
+                            splitTipAmt={this.state.splitTipAmt}>
+                     </Viewtip>) 
 
-                )}
+                    {/* } */}
                 </Row>
 
-        </Container >
-    );
-}
+            </Container >
+        );
+    }
 }
 
 export default Tips;

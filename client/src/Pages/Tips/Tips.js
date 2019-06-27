@@ -184,15 +184,15 @@ class Tips extends Component {
                     </Col>
                 </Row >
                 <Row>
-                    {/* {this.isTipCalc ? ( */}
-                        
+                    {this.state.isTipCalc ? (
+
                         <Viewtip
                             totalTip={this.state.totalTip}
                             splitTip={this.state.splitTip}
                             splitTipAmt={this.state.splitTipAmt}>
-                     </Viewtip>) 
+                        </Viewtip>) : null
 
-                    {/* } */}
+                    }
                 </Row>
 
             </Container >

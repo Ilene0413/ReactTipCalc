@@ -5,13 +5,14 @@ import { Input, FormBtn } from "../../components/Form";
 import Viewtip from "../../components/Viewtip";
 
 
+
 class Tips extends Component {
     constructor() {
         super();
         this.state = {
             billAmt: "",
             tipPercent: "",
-            splitTip: 0,
+            splitTip: "",
             totalTip: 0,
             splitTipAmt: 0,
             message: "",
@@ -90,37 +91,41 @@ class Tips extends Component {
         }
 
         //validate that split amount is entered 
-
-        //split number must be an integer
-        if (splitTip.includes(".")) {
-            message = "number of ways to split tip must be an integer";
+        if (isNaN(splitTip)) {
+            message = "# of ways to split tip must be an integer";
             this.setState({ message: message }); // creates a NEW state object
             return;
         }
         else {
-            if (splitTip <= 0) {
-                message = "number of ways to split tip must be greater than 0";
+            //split number must be an integer
+            if (splitTip.includes(".")) {
+                message = "number of ways to split tip must be an integer";
                 this.setState({ message: message }); // creates a NEW state object
                 return;
             }
+            else {
+                if (splitTip <= 0) {
+                    message = "number of ways to split tip must be greater than 0";
+                    this.setState({ message: message }); // creates a NEW state object
+                    return;
+                }
+            }
+            billAmount = parseFloat(billEntered);
+            percentTip = parseFloat(tipEntered);
+
+            //calculate tip amount based on dollar amount entered and percent tip
+
+            let totalTip = (billAmount * (percentTip / 100));
+
+            //split the tip amount then number of ways entered
+            let splitTipAmt = totalTip / splitTip;
+
+            //tip amounts should be rounded to 2 decimal places
+            totalTip = totalTip.toFixed(2);
+            splitTipAmt = splitTipAmt.toFixed(2);
+            let isTipCalc = true;
+            this.setState({ totalTip: totalTip, splitTip: splitTip, splitTipAmt: splitTipAmt, isTipCalc: isTipCalc });
         }
-        billAmount = parseFloat(billEntered);
-        percentTip = parseFloat(tipEntered);
-
-        //calculate tip amount based on dollar amount entered and percent tip
-
-        let totalTip = (billAmount * (percentTip / 100));
-
-        //split the tip amount then number of ways entered
-        let splitTipAmt = totalTip / splitTip;
-
-        //tip amounts should be rounded to 2 decimal places
-        totalTip = totalTip.toFixed(2);
-        splitTipAmt = splitTipAmt.toFixed(2);
-        let isTipCalc = true;
-        this.setState({ totalTip: totalTip, splitTip: splitTip, splitTipAmt: splitTipAmt, isTipCalc: isTipCalc });
-
-
     };
 
 
@@ -136,7 +141,7 @@ class Tips extends Component {
 
     resetForm = () => {
         console.log(this.baseState);
-        this.setState(this.baseState)
+        this.setState(this.baseState);
     };
 
     render() {
@@ -158,6 +163,7 @@ class Tips extends Component {
                             <h2>Bill Amount Before Tax</h2>
                             <Input
                                 type="text"
+                                value={this.state.billAmt}
                                 onChange={this.handleInputChange}
                                 name="billAmt"
                                 placeholder="Bill Amount (required)"
@@ -166,6 +172,7 @@ class Tips extends Component {
                             <h2>Percent Tip to Calculate</h2>
                             <Input
                                 type="text"
+                                value={this.state.tipPercent}
                                 onChange={this.handleInputChange}
                                 name="tipPercent"
                                 placeholder="Percent Tip(required)"
@@ -174,14 +181,13 @@ class Tips extends Component {
 
                             <Input
                                 type="text"
+                                value={this.state.splitTip}
                                 onChange={this.handleInputChange}
                                 name="splitTip"
                                 placeholder="# of ways to split tip"
                             />
                             <FormBtn
-                                disabled={!(this.state.billAmt)}
-                                disabled={!(this.state.tipPercent)}
-                                disabled={!(this.state.splitTip)}
+                                disabled={!(this.state.billAmt) || !(this.state.tipPercent) ||!(this.state.splitTip)}
                                 onClick={this.handleFormSubmit}
                             >
                                 Calculate Tip
@@ -194,18 +200,18 @@ class Tips extends Component {
                         </form>
                     </Col>
                 </Row >
-            <Row>
-                {this.state.isTipCalc ? (
+                <Row>
+                    {this.state.isTipCalc ? (
 
-                    <Viewtip
-                        totalTip={this.state.totalTip}
-                        splitTip={this.state.splitTip}
-                        splitTipAmt={this.state.splitTipAmt}>
-                    </Viewtip>
-                ) : null
+                        <Viewtip
+                            totalTip={this.state.totalTip}
+                            splitTip={this.state.splitTip}
+                            splitTipAmt={this.state.splitTipAmt}>
+                        </Viewtip>
+                    ) : null
 
-                }
-            </Row>
+                    }
+                </Row>
 
             </Container >
         );

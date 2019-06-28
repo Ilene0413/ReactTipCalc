@@ -19,88 +19,82 @@ class Tips extends Component {
             isTipCalc: false
         };
         this.handleInputChange = this.handleInputChange.bind(this);
+
+        //save the initial input form values in order to clear form at end of calculation
         this.baseState = this.state;
     }
-    //this function will saves the form input data to the correct variable
+    //this function will saves the form input data 
 
     handleInputChange = event => {
-
         this.setState({
             [event.target.name]: event.target.value
         });
-        console.log(`${event.target.name} ${event.target.value}`);
     };
 
     //function to validate input data
 
     validateInput = event => {
-        console.log("validate input");
         let billEntered = this.state.billAmt;
         let tipEntered = this.state.tipPercent;
         let splitTip = this.state.splitTip;
 
-        // let calcTip = {
-        //     billAmount: 0,
-        //     percentTip: 0,
-        //     splitTip: this.state.splitTip
-        // };
         let billAmount = 0;
         let percentTip = 0;
         let message = "";
 
         //validate the form input
-        //all entries must have a value
+        //all entries must have a numeric value
 
-        //validate bill amount - must be entered\ and have a valid dollar amount
+        //validate bill amount - must be numeric and have a valid dollar amount
 
         if (isNaN(billEntered)) {
             message = "bill amount must be a dollar amount";
-            this.setState({ message: message }); // creates a NEW state object
+            this.setState({ message: message });
             return;
         }
         else {
             //check that bill amount is greater than zero
             if (parseFloat(billEntered) <= 0) {
                 message = "bill amount must be greater than zero, tip = zero";
-                this.setState({ message: message }); // creates a NEW state object
+                this.setState({ message: message });
                 return;
             }
             else {
                 //have a number - check that it is a whole number or only 2 places after decimal;
                 if (billEntered.includes(".") && billEntered.charAt(billEntered.length - 3) !== ".") {
                     message = "enter valid dollar amount";
-                    this.setState({ message: message }); // creates a NEW state object
+                    this.setState({ message: message });
                     return;
                 };
             };
         };
-        //validate tip percentage amount entered - must be entered and numeric - number of decimals does not matter
+        //validate tip percentage - must be numeric - number of decimals does not matter
         //tip percentage amount must be greater than zero
 
         if (isNaN(tipEntered)) {
             message = "tip amount must be numeric";
-            this.setState({ message: message }); // creates a NEW state object
+            this.setState({ message: message });
             return;
         }
         else {
             if (parseFloat(tipEntered) <= 0) {
                 message = "tip percentage must be greater than zero";
-                this.setState({ message: message }); // creates a NEW state object
+                this.setState({ message: message });
                 return;
             }
         }
 
-        //validate that split amount is entered 
+        //validate that split amount is an integer
         if (isNaN(splitTip)) {
             message = "# of ways to split tip must be an integer";
-            this.setState({ message: message }); // creates a NEW state object
+            this.setState({ message: message });
             return;
         }
         else {
-            //split number must be an integer
+            //split number must be an integer and greater than 0
             if (splitTip.includes(".")) {
                 message = "number of ways to split tip must be an integer";
-                this.setState({ message: message }); // creates a NEW state object
+                this.setState({ message: message });
                 return;
             }
             else {
@@ -112,7 +106,10 @@ class Tips extends Component {
             }
             billAmount = parseFloat(billEntered);
             percentTip = parseFloat(tipEntered);
-
+            this.calcTip(billAmount, percentTip, splitTip);
+        };
+    };
+    calcTip = (billAmount, percentTip, splitTip) => { 
             //calculate tip amount based on dollar amount entered and percent tip
 
             let totalTip = (billAmount * (percentTip / 100));
@@ -125,97 +122,98 @@ class Tips extends Component {
             splitTipAmt = splitTipAmt.toFixed(2);
             let isTipCalc = true;
             this.setState({ totalTip: totalTip, splitTip: splitTip, splitTipAmt: splitTipAmt, isTipCalc: isTipCalc });
-        }
-    };
+
+        };
 
 
-    handleFormSubmit = event => {
-        event.preventDefault();
-        console.log(`bill amt ${this.state.billAmt} tipamt ${this.state.tipPercent} split ${this.state.splitTip}`);
-        // only able to submit if the bill amount and tip percentage were entered
-        // need to validate input 
-        this.validateInput();
+        // this function is called when the submit button is clicked
 
-    };
-    //sets the forms value back to the initial state
+        handleFormSubmit = event => {
+            event.preventDefault();
+            // only able to submit if all items of the form are entered
+            // call to calculate tip
+            this.validateInput();
 
-    resetForm = () => {
-        console.log(this.baseState);
-        this.setState(this.baseState);
-    };
+        };
+        //sets the forms value back to the initial state
 
-    render() {
-        return (
-            <Container fluid>
-                <Row>
-                    <Col size="sm-12">
-                        <Jumbotron>
-                            <h1>
-                                Calculate Restaurant Tip
+        resetForm = () => {
+            console.log(this.baseState);
+            this.setState(this.baseState);
+        };
+
+        render() {
+            return (
+                <Container fluid>
+                    <Row>
+                        <Col size="sm-12">
+                            <Jumbotron>
+                                <h1>
+                                    Calculate Restaurant Tip
 							</h1>
-                        </Jumbotron>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col size="sm-12">
-                        <h4> {this.state.message}</h4>
-                        <form>
-                            <h2>Bill Amount Before Tax</h2>
-                            <Input
-                                type="text"
-                                value={this.state.billAmt}
-                                onChange={this.handleInputChange}
-                                name="billAmt"
-                                placeholder="Bill Amount (required)"
-                            />
+                            </Jumbotron>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col size="sm-12">
+                            <h4> {this.state.message}</h4>
+                            <form>
+                                <h2>Bill Amount Before Tax</h2>
+                                <Input
+                                    type="text"
+                                    value={this.state.billAmt}
+                                    onChange={this.handleInputChange}
+                                    name="billAmt"
+                                    placeholder="Bill Amount (required)"
+                                />
 
-                            <h2>Percent Tip to Calculate</h2>
-                            <Input
-                                type="text"
-                                value={this.state.tipPercent}
-                                onChange={this.handleInputChange}
-                                name="tipPercent"
-                                placeholder="Percent Tip(required)"
-                            />
-                            <h2># of Ways to Split Tip</h2>
+                                <h2>Percent Tip to Calculate</h2>
+                                <Input
+                                    type="text"
+                                    value={this.state.tipPercent}
+                                    onChange={this.handleInputChange}
+                                    name="tipPercent"
+                                    placeholder="Percent Tip(required)"
+                                />
+                                <h2># of Ways to Split Tip</h2>
 
-                            <Input
-                                type="text"
-                                value={this.state.splitTip}
-                                onChange={this.handleInputChange}
-                                name="splitTip"
-                                placeholder="# of ways to split tip"
-                            />
-                            <FormBtn
-                                disabled={!(this.state.billAmt) || !(this.state.tipPercent) ||!(this.state.splitTip)}
-                                onClick={this.handleFormSubmit}
-                            >
-                                Calculate Tip
+                                <Input
+                                    type="text"
+                                    value={this.state.splitTip}
+                                    onChange={this.handleInputChange}
+                                    name="splitTip"
+                                    placeholder="# of ways to split tip"
+                                />
+                                <FormBtn
+                                    disabled={!(this.state.billAmt) || !(this.state.tipPercent) || !(this.state.splitTip)}
+                                    onClick={this.handleFormSubmit}
+                                >
+                                    Calculate Tip
 							</FormBtn>
 
-                            <FormBtn
-                                onClick={this.resetForm}
-                                type="button">Cancel
+                                <FormBtn
+                                    onClick={this.resetForm}
+                                    type="button">Cancel
                             </FormBtn>
-                        </form>
-                    </Col>
-                </Row >
-                <Row>
-                    {this.state.isTipCalc ? (
+                            </form>
+                        </Col>
+                    </Row >
+                    <Row>
+                        {this.state.isTipCalc ? (
 
-                        <Viewtip
-                            totalTip={this.state.totalTip}
-                            splitTip={this.state.splitTip}
-                            splitTipAmt={this.state.splitTipAmt}>
-                        </Viewtip>
-                    ) : null
+                            <Viewtip
+                                totalTip={this.state.totalTip}
+                                splitTip={this.state.splitTip}
+                                splitTipAmt={this.state.splitTipAmt}>
+                            </Viewtip>
+                        ) : null
 
-                    }
-                </Row>
+                        }
+                    </Row>
 
-            </Container >
-        );
+                </Container >
+            );
+        }
     }
-}
 
-export default Tips;
+    export default Tips;

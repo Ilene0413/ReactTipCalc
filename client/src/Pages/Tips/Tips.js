@@ -5,7 +5,6 @@ import { Input, FormBtn } from "../../components/Form";
 import Viewtip from "../../components/Viewtip";
 
 
-
 class Tips extends Component {
     constructor() {
         super();
@@ -19,6 +18,7 @@ class Tips extends Component {
             isTipCalc: false
         };
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.baseState = this.state;
     }
     //this function will saves the form input data to the correct variable
 
@@ -118,7 +118,6 @@ class Tips extends Component {
         totalTip = totalTip.toFixed(2);
         splitTipAmt = splitTipAmt.toFixed(2);
         let isTipCalc = true;
-        console.log(isTipCalc);
         this.setState({ totalTip: totalTip, splitTip: splitTip, splitTipAmt: splitTipAmt, isTipCalc: isTipCalc });
 
 
@@ -132,6 +131,12 @@ class Tips extends Component {
         // need to validate input 
         this.validateInput();
 
+    };
+    //sets the forms value back to the initial state
+
+    resetForm = () => {
+        console.log(this.baseState);
+        this.setState(this.baseState)
     };
 
     render() {
@@ -148,7 +153,7 @@ class Tips extends Component {
                 </Row>
                 <Row>
                     <Col size="sm-12">
-                        <p> {this.state.message}</p>
+                        <h4> {this.state.message}</h4>
                         <form>
                             <h2>Bill Amount Before Tax</h2>
                             <Input
@@ -166,6 +171,7 @@ class Tips extends Component {
                                 placeholder="Percent Tip(required)"
                             />
                             <h2># of Ways to Split Tip</h2>
+
                             <Input
                                 type="text"
                                 onChange={this.handleInputChange}
@@ -180,20 +186,26 @@ class Tips extends Component {
                             >
                                 Calculate Tip
 							</FormBtn>
+
+                            <FormBtn
+                                onClick={this.resetForm}
+                                type="button">Cancel
+                            </FormBtn>
                         </form>
                     </Col>
                 </Row >
-                <Row>
-                    {this.state.isTipCalc ? (
+            <Row>
+                {this.state.isTipCalc ? (
 
-                        <Viewtip
-                            totalTip={this.state.totalTip}
-                            splitTip={this.state.splitTip}
-                            splitTipAmt={this.state.splitTipAmt}>
-                        </Viewtip>) : null
+                    <Viewtip
+                        totalTip={this.state.totalTip}
+                        splitTip={this.state.splitTip}
+                        splitTipAmt={this.state.splitTipAmt}>
+                    </Viewtip>
+                ) : null
 
-                    }
-                </Row>
+                }
+            </Row>
 
             </Container >
         );

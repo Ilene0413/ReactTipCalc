@@ -155,6 +155,7 @@ class Tips extends Component {
                     </Col>
                 </Row>
                 <Row>
+                    <Col size="sm-4"/>
                     <Col size="sm-4">
                         <h4> {this.state.message}</h4>
                         <form>
@@ -200,18 +201,18 @@ class Tips extends Component {
                     </Col>
                 </Row >
                 <Row>
+                    <Col size="sm-4"/>
+                    <Col size="sm-4">
                     {this.state.isTipCalc ? (
-
                         <Viewtip
                             totalTip={this.state.totalTip}
                             splitTip={this.state.splitTip}
                             splitTipAmt={this.state.splitTipAmt}>
                         </Viewtip>
                     ) : null
-
                     }
+                    </Col>
                 </Row>
-
             </Container >
         );
     }

@@ -104,11 +104,16 @@ class Tips extends Component {
                     return;
                 }
             }
+
+            // convert bill amount and tip percentage to numeric values to calculate tip
             billAmount = parseFloat(billEntered);
             percentTip = parseFloat(tipEntered);
             this.calcTip(billAmount, percentTip, splitTip);
         };
     };
+
+    //this function calculates the total tip and the amount of tip per person/group
+
     calcTip = (billAmount, percentTip, splitTip) => {
         //calculate tip amount based on dollar amount entered and percent tip
 
@@ -135,12 +140,18 @@ class Tips extends Component {
         this.validateInput();
 
     };
-    //sets the forms value back to the initial state
+    //this function sets the forms value back to the initial state
 
     resetForm = () => {
         console.log(this.baseState);
         this.setState(this.baseState);
     };
+// render the form
+// input bill amount before tax, percent tip want to leave, and the number of ways to split the tip
+// the calculate tip button is disabled until all three values are entered
+// the tip amounts will be displayed if the tip has been calculated
+// use can press cancel button to reset the form and perform another calculation
+// if any input is entered incorrectly, a message will be displayed
 
     render() {
         return (
@@ -155,7 +166,7 @@ class Tips extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col size="sm-4"/>
+                    <Col size="sm-4" />
                     <Col size="sm-4">
                         <h4> {this.state.message}</h4>
                         <form>
@@ -201,16 +212,16 @@ class Tips extends Component {
                     </Col>
                 </Row >
                 <Row>
-                    <Col size="sm-4"/>
+                    <Col size="sm-4" />
                     <Col size="sm-4">
-                    {this.state.isTipCalc ? (
-                        <Viewtip
-                            totalTip={this.state.totalTip}
-                            splitTip={this.state.splitTip}
-                            splitTipAmt={this.state.splitTipAmt}>
-                        </Viewtip>
-                    ) : null
-                    }
+                        {this.state.isTipCalc ? (
+                            <Viewtip
+                                totalTip={this.state.totalTip}
+                                splitTip={this.state.splitTip}
+                                splitTipAmt={this.state.splitTipAmt}>
+                            </Viewtip>
+                        ) : null
+                        }
                     </Col>
                 </Row>
             </Container >

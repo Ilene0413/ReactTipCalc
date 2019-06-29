@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Tips from "./Pages/Tips";
 import NoMatch from "./Pages/NoMatch";
 
+// this function determines if a valid path was entered
+
 function App() {
   return (
     <Router>

@@ -109,111 +109,112 @@ class Tips extends Component {
             this.calcTip(billAmount, percentTip, splitTip);
         };
     };
-    calcTip = (billAmount, percentTip, splitTip) => { 
-            //calculate tip amount based on dollar amount entered and percent tip
+    calcTip = (billAmount, percentTip, splitTip) => {
+        //calculate tip amount based on dollar amount entered and percent tip
 
-            let totalTip = (billAmount * (percentTip / 100));
+        let totalTip = (billAmount * (percentTip / 100));
 
-            //split the tip amount then number of ways entered
-            let splitTipAmt = totalTip / splitTip;
+        //split the tip amount then number of ways entered
+        let splitTipAmt = totalTip / splitTip;
 
-            //tip amounts should be rounded to 2 decimal places
-            totalTip = totalTip.toFixed(2);
-            splitTipAmt = splitTipAmt.toFixed(2);
-            let isTipCalc = true;
-            this.setState({ totalTip: totalTip, splitTip: splitTip, splitTipAmt: splitTipAmt, isTipCalc: isTipCalc });
+        //tip amounts should be rounded to 2 decimal places
+        totalTip = totalTip.toFixed(2);
+        splitTipAmt = splitTipAmt.toFixed(2);
+        let isTipCalc = true;
+        this.setState({ totalTip: totalTip, splitTip: splitTip, splitTipAmt: splitTipAmt, isTipCalc: isTipCalc });
 
-        };
+    };
 
 
-        // this function is called when the submit button is clicked
+    // this function is called when the submit button is clicked
 
-        handleFormSubmit = event => {
-            event.preventDefault();
-            // only able to submit if all items of the form are entered
-            // call to calculate tip
-            this.validateInput();
+    handleFormSubmit = event => {
+        event.preventDefault();
+        // only able to submit if all items of the form are entered
+        // call to calculate tip
+        this.validateInput();
 
-        };
-        //sets the forms value back to the initial state
+    };
+    //sets the forms value back to the initial state
 
-        resetForm = () => {
-            console.log(this.baseState);
-            this.setState(this.baseState);
-        };
+    resetForm = () => {
+        console.log(this.baseState);
+        this.setState(this.baseState);
+    };
 
-        render() {
-            return (
-                <Container fluid>
-                    <Row>
-                        <Col size="sm-12">
-                            <Jumbotron>
-                                <h1>
-                                    Calculate Restaurant Tip
+    render() {
+        return (
+            <Container fluid>
+                <Row>
+                    <Col size="sm-12">
+                        <Jumbotron>
+                            <h1>
+                                Calculate Restaurant Tip
 							</h1>
-                            </Jumbotron>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col size="sm-12">
-                            <h4> {this.state.message}</h4>
-                            <form>
-                                <h2>Bill Amount Before Tax</h2>
-                                <Input
-                                    type="text"
-                                    value={this.state.billAmt}
-                                    onChange={this.handleInputChange}
-                                    name="billAmt"
-                                    placeholder="Bill Amount (required)"
-                                />
+                        </Jumbotron>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col size="sm-4">
+                        <h4> {this.state.message}</h4>
+                        <form>
+                            <h2>Bill Amount Before Tax</h2>
+                            <Input
+                                type="text"
+                                value={this.state.billAmt}
+                                onChange={this.handleInputChange}
+                                name="billAmt"
+                                placeholder="Bill Amount (required)"
+                            />
 
-                                <h2>Percent Tip to Calculate</h2>
-                                <Input
-                                    type="text"
-                                    value={this.state.tipPercent}
-                                    onChange={this.handleInputChange}
-                                    name="tipPercent"
-                                    placeholder="Percent Tip(required)"
-                                />
-                                <h2># of Ways to Split Tip</h2>
+                            <h2>Percent Tip to Calculate</h2>
+                            <Input
+                                type="text"
+                                value={this.state.tipPercent}
+                                onChange={this.handleInputChange}
+                                name="tipPercent"
+                                placeholder="Percent Tip(required)"
+                            />
+                            <h2># of Ways to Split Tip</h2>
 
-                                <Input
-                                    type="text"
-                                    value={this.state.splitTip}
-                                    onChange={this.handleInputChange}
-                                    name="splitTip"
-                                    placeholder="# of ways to split tip"
-                                />
-                                <FormBtn
-                                    disabled={!(this.state.billAmt) || !(this.state.tipPercent) || !(this.state.splitTip)}
-                                    onClick={this.handleFormSubmit}
-                                >
-                                    Calculate Tip
+                            <Input
+                                type="text"
+                                value={this.state.splitTip}
+                                onChange={this.handleInputChange}
+                                name="splitTip"
+                                placeholder="# of ways to split tip"
+                            />
+                            <FormBtn
+                                onClick={this.resetForm}
+                                type="button">Cancel
+                            </FormBtn>
+
+                            <FormBtn
+                                disabled={!(this.state.billAmt) || !(this.state.tipPercent) || !(this.state.splitTip)}
+                                onClick={this.handleFormSubmit}
+                            >
+                                Calculate Tip
 							</FormBtn>
 
-                                <FormBtn
-                                    onClick={this.resetForm}
-                                    type="button">Cancel
-                            </FormBtn>
-                            </form>
-                        </Col>
-                    </Row >
-                    <Row>
-                        {this.state.isTipCalc ? (
+                        </form>
+                    </Col>
+                </Row >
+                <Row>
+                    {this.state.isTipCalc ? (
 
-                            <Viewtip
-                                totalTip={this.state.totalTip}
-                                splitTip={this.state.splitTip}
-                                splitTipAmt={this.state.splitTipAmt}>
-                            </Viewtip>
-                        ) : null
+                        <Viewtip
+                            totalTip={this.state.totalTip}
+                            splitTip={this.state.splitTip}
+                            splitTipAmt={this.state.splitTipAmt}>
+                        </Viewtip>
+                    ) : null
 
-                        }
-                    </Row>
+                    }
+                </Row>
 
-                </Container >
-            );
-        }
+            </Container >
+        );
     }
+}
 
-    export default Tips;
+export default Tips;

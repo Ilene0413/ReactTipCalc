@@ -10,19 +10,19 @@ The app is created using React.
 
 The user is required to enter the bill amount prior to tax, percent tip they want to leave, and the number of ways to split the tip.  The submit (calcualte tip button) is disabled until all 3 are entered. 
 
-![first screen](https://github.com/Ilene0413/ReactTipCalc/client/images/homepage.png)
+![first screen](https://github.com/Ilene0413/ReactTipCalc/images/homepage.png)
 
 If the user does not enter a valid entry, an error will display.
-![error screen](https://github.com/Ilene0413/ReactTipCalc/client/images/error.png)
+![error screen](https://github.com/Ilene0413/ReactTipCalc/images/error.png)
 
 If all 3 values are not entered, the calculate tip button is disabled.
-![disabled button screen](https://github.com/Ilene0413/ReactTipCalc/client/images/disable.png)
+![disabled button screen](https://github.com/Ilene0413/ReactTipCalc/images/disable.png)
 
 Once all values are entered, the calculate tip button is enabled.
-![enabled button screen](https://github.com/Ilene0413/ReactTipCalc/client/images/allentries.png)
+![enabled button screen](https://github.com/Ilene0413/ReactTipCalc/images/allentries.png)
 
 The calculated tip button was clicked and the tips were calculated
-![enabled button screen](https://github.com/Ilene0413/ReactTipCalc/client/images/calctip.png)
+![enabled button screen](https://github.com/Ilene0413/ReactTipCalc/images/calctip.png)
 
 
 Developed by Ilene Cohen.
